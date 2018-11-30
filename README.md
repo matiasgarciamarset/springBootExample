@@ -4,7 +4,9 @@
 This is a very simple project using:
 * Maven 
 * Spring boot
-* APIs 
+* APIs
+* Model Mapper
+* Lombok
 * JPA (with h2 as DB)
 
 **Functional description:**
@@ -57,3 +59,16 @@ returns 200:
     "id": 2,
     "name" : "test2"
     }]
+
+**Run project**
+
+Using IntellJ:
+
+1. Open project (select main foilder):
+
+2. Select maven project
+
+3. And click on "next" button (until see project)
+
+4. Run project: Right click on Application.java and click on "Run .."
+
