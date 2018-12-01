@@ -1,5 +1,6 @@
 package com.simple.base.project.api;
 
+import com.simple.base.project.api.dto.LoginDto;
 import com.simple.base.project.api.dto.PersonCreationDto;
 import com.simple.base.project.api.dto.PersonDto;
 import com.simple.base.project.repository.ApplicationRepository;
@@ -18,10 +19,22 @@ public class ApplicationApi {
     ModelMapper mapper = new ModelMapper();
 
     @Autowired
+    private TokenService tokenService;
+
+    @Autowired
     private ApplicationRepository productRepository;
+
+    @PostMapping("/signup")
+    public String signup(@RequestBody LoginDto login) {
+        String token = tokenService.createToken(login.getUser(), login.getPassword());
+        return "Please use this token in the headers: Security = " + token;
+    }
 
     @GetMapping("/values")
     public List<PersonDto> values(@RequestParam(value="name", required = false) String name) {
+        if (!tokenService.isTokenValid(token)) {
+            return null;
+        }
         if (name != null) {
             return productRepository.findByName(name).stream().map(v -> mapper.map(v, PersonDto.class)).collect(Collectors.toList());
         }
@@ -29,7 +42,10 @@ public class ApplicationApi {
     }
 
     @PostMapping("/create")
-    public PersonDto create(@RequestBody PersonCreationDto create) {
+    public PersonDto create(@RequestBody PersonCreationDto create, @RequestHeader(name="Security") String token) {
+        if (!tokenService.isTokenValid(token)) {
+            return null;
+        }
         Person entity = mapper.map(create, Person.class);
         return mapper.map(productRepository.save(entity), PersonDto.class);
     }
