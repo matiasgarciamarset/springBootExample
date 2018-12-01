@@ -21,7 +21,7 @@ public class ApplicationApi {
     private ApplicationRepository productRepository;
 
     @GetMapping("/values")
-    public List<PersonDto> ping(@RequestParam(value="name", required = false) String name) {
+    public List<PersonDto> values(@RequestParam(value="name", required = false) String name) {
         if (name != null) {
             return productRepository.findByName(name).stream().map(v -> mapper.map(v, PersonDto.class)).collect(Collectors.toList());
         }

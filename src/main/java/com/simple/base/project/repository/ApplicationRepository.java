@@ -9,21 +9,21 @@ import java.util.List;
 @Component
 public class ApplicationRepository {
 
-    private final PersonDao productRepository;
+    private final PersonDao productDao;
 
-    ApplicationRepository(final PersonDao productRepository) {
-        this.productRepository = productRepository;
+    ApplicationRepository(final PersonDao productDao) {
+        this.productDao = productDao;
     }
 
     public List<Person> findByName(String name) {
-        return productRepository.findByName(name);
+        return productDao.findByName(name);
     }
 
     public List<Person> findAll() {
-        return productRepository.findAll();
+        return productDao.findAll();
     }
 
     public Person save(Person entity) {
-        return productRepository.save(entity);
+        return productDao.save(entity);
     }
 }
