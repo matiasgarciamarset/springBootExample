@@ -1,8 +1,9 @@
 package com.simple.base.project.api;
 
-import com.simple.base.project.api.dto.LoginDto;
+import com.simple.base.project.api.dto.SignupDto;
 import com.simple.base.project.api.dto.PersonCreationDto;
 import com.simple.base.project.api.dto.PersonDto;
+import com.simple.base.project.api.dto.SignupResponseDto;
 import com.simple.base.project.repository.ApplicationRepository;
 import com.simple.base.project.repository.model.Person;
 import org.modelmapper.ModelMapper;
@@ -25,13 +26,13 @@ public class ApplicationApi {
     private ApplicationRepository productRepository;
 
     @PostMapping("/signup")
-    public String signup(@RequestBody LoginDto login) {
+    public SignupResponseDto signup(@RequestBody SignupDto login) {
         String token = tokenService.createToken(login.getUser(), login.getPassword());
-        return "Please use this token in the headers: Security = " + token;
+        return new SignupResponseDto(login.getUser(), token);
     }
 
     @GetMapping("/values")
-    public List<PersonDto> values(@RequestParam(value="name", required = false) String name) {
+    public List<PersonDto> values(@RequestParam(value="name", required = false) String name, @RequestHeader(name="Security") String token) {
         if (!tokenService.isTokenValid(token)) {
             return null;
         }
